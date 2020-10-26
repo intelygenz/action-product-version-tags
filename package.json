@@ -1,0 +1,19 @@
+{
+  "name": "action-pre-release",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "js-yaml": "^3.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "ncc build src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

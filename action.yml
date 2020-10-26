@@ -1,0 +1,33 @@
+name: 'product-version-tags'
+description: 'Generate version tags on a product lifecycle'
+branding:
+  icon: 'tag'
+  color: 'gray-dark'
+inputs:
+  dry-run:
+    description: 'Enable dry run mode, expected "true" "false"'
+    required: false
+    default: 'false'
+  mode:
+    description: 'Execution mode can be "pre-release" "release" "fix"'
+    required: true
+  current-major:
+    description: 'Current major'
+    required: false
+  prefix:
+    description: 'Release prefix, e.g. "release-"'
+    required: false
+  pre-release:
+    description: 'A prerelease, e.g. "alpha"'
+    required: false
+  default-branch:
+    description: '"Default branch to create a version tag, e.g. "main"'
+    required: false
+    default: 'main'
+
+outputs:
+  tag:
+    description: 'The new version that was created and tagged in the format of <major>.<minor>.<build>[.<pre-release-tag>]'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
