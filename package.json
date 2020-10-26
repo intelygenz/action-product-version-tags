@@ -1,7 +1,6 @@
 {
-  "name": "action-pre-release",
-  "version": "1.0.0",
-  "description": "",
+  "name": "action-product-version-tags",
+  "description": "Generate version tags on a product lifecycle",
   "main": "index.js",
   "dependencies": {
     "@actions/core": "^1.2.6",
