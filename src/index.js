@@ -10,7 +10,7 @@ const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/")
 const {readWorkflowsAndFilterByName,checkWorkflowDeps} = require('./workflows')(octokit, owner, repo)
 
 const { calcPreReleaseBranch, createBranch } = require('./branches')(octokit, owner, repo)
-const { calcPrereleaseTag, getLastPreReleaseTag, getLastReleaseTag, createTag } = require('./tags')(octokit, owner, repo)
+const {existsCommitInLastTags, calcPrereleaseTag, getLastPreReleaseTag, getLastReleaseTag, createTag } = require('./tags')(octokit, owner, repo)
 
 
 // Input variables
@@ -29,8 +29,11 @@ async function main() {
     const workflow = readWorkflowsAndFilterByName(github.context.workflow)
     // TODO: Clean this code
     if (workflow.on && workflow.on.workflow_run && workflow.on.workflow_run.workflows) {
-      const success = await checkWorkflowDeps(workflow.on.workflow_run.workflows, github.context.payload.workflow_run.head_commit.id)
-      if(!success) return console.log("Action skipped because another workflows for the same commit are in progress")
+      const workflowSha = github.context.payload.workflow_run.head_commit.id
+      const successDeps = await checkWorkflowDeps(workflow.on.workflow_run.workflows, workflowSha)
+      if(!successDeps) return console.log("Action skipped because another workflows for the same commit are in progress.")
+      const existCommit = await existsCommitInLastTags(workflowSha)
+      if(existCommit) return console.log(`Action skipped because a tag with this commit '${worflow}' has been previously generated.`)
     }
 
     switch(mode){

@@ -1,4 +1,29 @@
 module.exports = function(octokit, owner, repo) {
+    async function searchLastTags() {   
+        try {
+            const { data: tags } = await octokit.repos.listTags({
+                owner,
+                repo,
+                per_page: 100,
+            });
+
+            return tags
+        } catch (err) {
+            throw err
+        }
+    }
+
+    async function existsCommitInLastTags(sha){
+        try {
+            const tags = await searchLastTags()
+            filterTags = tags.filter( tag => tag.commit.sha === sha)
+            if(filterTags.length === 0) return false
+            return true
+        } catch (error) {
+            throw err
+        }
+    }
+
     async function searchTagNames() {
         let tagNames = []
         let data_length = 0
@@ -93,5 +118,5 @@ module.exports = function(octokit, owner, repo) {
             throw err
         }
     }
-    return {calcPrereleaseTag, getLastPreReleaseTag, getLastReleaseTag, createTag}
+    return {existsCommitInLastTags, calcPrereleaseTag, getLastPreReleaseTag, getLastReleaseTag, createTag}
 }

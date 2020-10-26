@@ -30,4 +30,4 @@ outputs:
     description: 'The new version that was created and tagged in the format of <major>.<minor>.<build>[.<pre-release-tag>]'
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'action-product-version-tags/dist/index.js'
