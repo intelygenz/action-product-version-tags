@@ -29,7 +29,7 @@ async function main() {
     const workflow = readWorkflowsAndFilterByName(github.context.workflow)
     // TODO: Clean this code
     if (workflow.on && workflow.on.workflow_run && workflow.on.workflow_run.workflows) {
-      const success = await checkWorkflowDeps(workflow.on.workflow_run.workflows, github.context.sha)
+      const success = await checkWorkflowDeps(workflow.on.workflow_run.workflows, github.context.payload.workflow_run.head_commit.id)
       if(!success) return console.log("Action skipped because another workflows for the same commit are in progress")
     }
 
