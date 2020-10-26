@@ -36,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Generate a pre-release
-        uses: ./action-product-version-tags
+        uses: intelygenz/action-product-version-tags@v0.1.1
         with:
           current-major: 0
           prefix: "release-"
@@ -76,7 +76,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Generate a release
-        uses: ./action-product-version-tags
+        uses: intelygenz/action-product-version-tags@v0.1.1
         with:
           prefix: "release-"
           mode: 'release'
@@ -111,7 +111,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Generate a fix
-        uses: ./action-product-version-tags
+        uses: intelygenz/action-product-version-tags@v0.1.1
         with:
           prefix: "release-"
           mode: 'fix'
