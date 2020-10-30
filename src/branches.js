@@ -27,7 +27,7 @@ module.exports = function (octokit, owner, repo) {
         try {
             const branchNames = await searchBranchNames(octokit, owner, repo)
             let major = currentMajor
-            let minor = 0
+            let minor = 1
     
             const regex = new RegExp(`^${prefix}(\\d+).(\\d+)$`, 'g')
             
