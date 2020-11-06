@@ -59,15 +59,17 @@ module.exports = function(octokit, owner, repo) {
         }
     }
 
-    async function getLastReleaseTag() {
-        try {
-            const tagNames = await searchTagNames(octokit, owner, repo)
-            const tagsWithPrefix = tagNames.filter(tagName => tagName.match(`^v[0-9]+.[0-9]+.[0-9]+$`))
-            if (tagsWithPrefix.length !== 0) return tagsWithPrefix[0]
-            return null
-        } catch (err) {
-            throw err
+    async function getLastReleaseTagFromReleaseBranch(release_branch) {
+      try {
+        const tagNames = await searchTagNames(octokit, owner, repo)
+        const tagsWithPrefix = tagNames.filter(tagName => tagName.match(`^v${release_branch}.[0-9]+$`))
+        if (tagsWithPrefix.length !== 0) {
+          return tagsWithPrefix[0]
         }
+        return null
+      } catch (err) {
+        throw err
+      }
     }
       
     async function calcPrereleaseTag(release, preRelease) {
@@ -118,5 +120,12 @@ module.exports = function(octokit, owner, repo) {
             throw err
         }
     }
-    return {existsCommitInLastTags, calcPrereleaseTag, getLastPreReleaseTag, getLastReleaseTag, createTag}
+
+  return {
+    existsCommitInLastTags,
+    calcPrereleaseTag,
+    getLastPreReleaseTag,
+    getLastReleaseTagFromReleaseBranch,
+    createTag
+  }
 }

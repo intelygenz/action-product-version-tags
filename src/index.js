@@ -9,8 +9,14 @@ const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/")
 // Initialize Modules
 const {readWorkflowsAndFilterByName,checkWorkflowDeps} = require('./workflows')(octokit, owner, repo)
 
-const { calcPreReleaseBranch, createBranch } = require('./branches')(octokit, owner, repo)
-const {existsCommitInLastTags, calcPrereleaseTag, getLastPreReleaseTag, getLastReleaseTag, createTag } = require('./tags')(octokit, owner, repo)
+const {calcPreReleaseBranch, createBranch} = require('./branches')(octokit, owner, repo)
+const {
+  existsCommitInLastTags,
+  calcPrereleaseTag,
+  getLastPreReleaseTag,
+  getLastReleaseTagFromReleaseBranch,
+  createTag
+} = require('./tags')(octokit, owner, repo)
 
 
 // Input variables
@@ -55,9 +61,10 @@ async function main() {
 
 async function runFix() {
   try {
-    const tag = await getLastReleaseTag()
-    if(!tag) return core.setFailed('There are any release yet')
-    
+    const release_branch = github.context.payload.ref.replace("refs/heads/release-", "")
+    const tag = await getLastReleaseTagFromReleaseBranch(release_branch)
+    if (!tag) return core.setFailed('There are any release yet')
+
     const regex = new RegExp(`^v(\\d+).(\\d+).(\\d+)$`, 'g')
     const matches = regex.exec(tag)
     const major = parseInt(matches[1]);
@@ -65,7 +72,7 @@ async function runFix() {
     const patch = parseInt(matches[3]);
 
     const releaseBranch = `${prefix}${major}.${minor}`
-    const fixTag = `v${major}.${minor}.${patch+1}`
+    const fixTag = `v${major}.${minor}.${patch + 1}`
     if (!dryRun) await createTag(fixTag, releaseBranch)
 
     core.setOutput("release-version", fixTag)
