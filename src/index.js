@@ -61,9 +61,6 @@ async function main() {
 
 async function runFix() {
   try {
-    console.log('-------------------BEGINING GITHUB CONTEXT -------------------------')
-    console.log(github.context)
-    console.log('-------------------END GITHUB CONTEXT -------------------------')
     const release_branch = github.context.payload.workflow_run.head_branch.replace("release-", "")
     const tag = await getLastReleaseTagFromReleaseBranch(release_branch)
     if (!tag) return core.setFailed('There are any release yet')
