@@ -51,14 +51,14 @@ async function main() {
     switch(mode){
       case 'pre-release':
         if(checkPrereleaseRequirements(core, preRelease)) {
-          runPreRelease()
+          await runPreRelease()
         }
         break
       case 'release':
-        runRelease(prefix,defaultBranch)
+        await runRelease(prefix,defaultBranch)
         break
       case 'fix':
-        runFix()
+        await runFix()
         break
     }
 
